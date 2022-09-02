@@ -16,5 +16,5 @@ shape = SubResource( 1 )
 
 [node name="Player" parent="." instance=ExtResource( 1 )]
 position = Vector2( 128, 258 )
-scale = Vector2( 3, 3 )
+scale = Vector2( 2, 2 )
 script = ExtResource( 2 )
