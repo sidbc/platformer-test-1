@@ -1,6 +1,8 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://characters.png" type="Texture" id=1]
+[ext_resource path="res://swoosh.png" type="Texture" id=2]
+[ext_resource path="res://Player.gd" type="Script" id=3]
 
 [sub_resource type="CapsuleShape2D" id=1]
 height = 4.0
@@ -48,13 +50,85 @@ animations = [ {
 "speed": 8.0
 } ]
 
-[node name="KinematicBody2D" type="KinematicBody2D"]
+[sub_resource type="AtlasTexture" id=9]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 32 )
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+[sub_resource type="AtlasTexture" id=10]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=11]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 64, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=12]
+flags = 4
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ SubResource( 9 ), SubResource( 10 ), SubResource( 11 ), SubResource( 12 ) ],
+"loop": false,
+"name": "swoosh",
+"speed": 12.0
+} ]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="HeroBody" type="KinematicBody2D" parent="."]
+script = ExtResource( 3 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HeroBody"]
 position = Vector2( 0, 4 )
 shape = SubResource( 1 )
 
-[node name="AnimatedSprite" type="AnimatedSprite" parent="."]
+[node name="Hero" type="AnimatedSprite" parent="HeroBody"]
 frames = SubResource( 6 )
 animation = "idle"
+frame = 1
 playing = true
+
+[node name="AttackRight" type="AnimatedSprite" parent="HeroBody"]
+visible = false
+position = Vector2( 1.90735e-06, 4 )
+scale = Vector2( 0.984758, 0.512066 )
+frames = SubResource( 13 )
+animation = "swoosh"
+frame = 3
+offset = Vector2( 16.2476, 1.95287 )
+
+[node name="AttackLeft" type="AnimatedSprite" parent="HeroBody"]
+visible = false
+position = Vector2( 0, 5 )
+scale = Vector2( 0.969749, 0.58908 )
+frames = SubResource( 13 )
+animation = "swoosh"
+frame = 3
+playing = true
+offset = Vector2( -15.7194, -0.911798 )
+flip_h = true
+
+[node name="AttackLeftArea" type="Area2D" parent="."]
+
+[node name="AttackLeftCollission" type="CollisionPolygon2D" parent="AttackLeftArea"]
+light_mask = 2
+position = Vector2( -21, 5 )
+scale = Vector2( 1.28, 1 )
+polygon = PoolVector2Array( 8.59375, -9, 1.5625, -9, -3.125, -7, -6.25, -3, -7.03125, 2, -7.03125, 6, -3.90625, 8, -0.78125, 9, 6.25, 9, 0.78125, 5, -1.5625, 0, 0, -5, 3.90625, -7 )
+
+[node name="AttackRightArea" type="Area2D" parent="."]
+
+[node name="AttackRightCollission" type="CollisionPolygon2D" parent="AttackRightArea"]
+light_mask = 2
+position = Vector2( 20, 6 )
+scale = Vector2( 1.24789, 0.830112 )
+polygon = PoolVector2Array( -7.21218, -9.63726, 0, -9.63726, 4.00677, -8.4326, 7.21218, -6.02329, 9.61624, -2.40932, 9.61624, 2.40931, 8.81489, 6.02329, 6.41083, 8.4326, 2.40406, 8.4326, -4.80812, 8.4326, 0, 6.02329, 2.40406, -4.76837e-07, 1.60271, -4.81863, -1.60271, -8.4326 )
+disabled = true
+
+[connection signal="animation_finished" from="HeroBody/AttackRight" to="HeroBody" method="_on_AttackRight_animation_finished"]
+[connection signal="animation_finished" from="HeroBody/AttackLeft" to="HeroBody" method="_on_AttackLeft_animation_finished"]
