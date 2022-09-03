@@ -5,9 +5,9 @@ extends KinematicBody2D
 # var a = 2
 # var b = "text"
 
-const GRAVITY = 200.0
+const GRAVITY = 250.0
 const WALK_SPEED = 200
-const JUMP_SPEED = 200
+const JUMP_SPEED = 250
 
 var velocity = Vector2()
 var jumping = false
